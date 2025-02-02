@@ -101,7 +101,7 @@ std::string NameGen::getEffectName(Effects effect, float intensity) {
 	std::map<std::pair<std::string, Effects>, float>::iterator it;
 
 	for (it = potionPotencyEffectName.begin(); it != potionPotencyEffectName.end(); it++) {
-		if (it->second == floor(intensity) && it->first.second == effect) {
+		if (it->second == intensity && it->first.second == effect) {
 			name = it->first.first;
 		}
 	}
