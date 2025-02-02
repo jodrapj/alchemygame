@@ -120,7 +120,7 @@ int NameGen::random(int min, int max) {
 	return dist(gen);
 }
 /// Potion name generator based on first letters of each ingredient name
-/// potion: Potion to be given a name 
+/// usedIngredients: Ingredients used in potion creation to get letters and from and calculate intensity for potionType
 std::string NameGen::generateName(std::map<AlchemyObject*, unsigned int> usedIngredients) {
 	std::string name;
 	float intensity = 0;
@@ -141,7 +141,7 @@ std::string NameGen::generateName(std::map<AlchemyObject*, unsigned int> usedIng
 	return name + " " + potionType[clamp((int)std::floor(intensity), 0, (int)potionType.size())];
 }
 /// Potion name generator based on dominating potion effect
-/// potion: Potion to be given a name
+/// usedIngredients: Ingredients used in potion creation to calculate dominating effect and intensity for potionType
 std::string NameGen::generateNameE(std::map<AlchemyObject*, unsigned int> usedIngredients) {
 	std::string name;
 	float intensity = 0;
@@ -172,7 +172,6 @@ std::string NameGen::generateNameE(std::map<AlchemyObject*, unsigned int> usedIn
 }
 
 /// Ingredient name generator
-/// ingredient: Ingredient to be given a name
 std::string NameGen::generateName() {
 	return alchemicIngredientNames[distr(gen)] + " " + alchemicIngredientTypes[distr(gen)];
 }
