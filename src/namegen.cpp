@@ -145,7 +145,7 @@ std::string NameGen::generateName(std::map<AlchemyObject*, unsigned int> usedIng
 	return name + " " + (type != "" ? type : potionType[0]);
 }
 /// Potion name generator based on dominating potion effect
-/// usedIngredients: Ingredients used in potion generation
+/// potion: Potion to be given a name
 std::string NameGen::generateNameE(std::map<AlchemyObject*, unsigned int> usedIngredients) {
 	std::string name;
 	float intensity = 0;
@@ -178,7 +178,6 @@ std::string NameGen::generateNameE(std::map<AlchemyObject*, unsigned int> usedIn
 }
 
 /// Ingredient name generator
-/// ingredient: Ingredient to be given a name
 std::string NameGen::generateName() {
 	return alchemicIngredientNames[distr(gen)] + " " + alchemicIngredientTypes[distr(gen)];
 }
