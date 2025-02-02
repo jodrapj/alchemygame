@@ -6,12 +6,27 @@
 
 #include <iostream>
 
+Effects randomeffect(NameGen* gen) {
+	int a = gen->random(0, 2);
+	switch (a) {
+	case 0:
+		return ALCOHOL;
+		break;
+	case 1:
+		return HEAL;
+		break;
+	case 2:
+		return DAMAGE;
+		break;
+	}
+}
+
 int main() {
 
 	NameGen* gen = new NameGen();
 
 	for (int i = 0; i < 10; i++) {
-		AlchemyObject* obj = new AlchemyObject(ALCOHOL, PLANT, i, false, gen->generateName());
+		AlchemyObject* obj = new AlchemyObject(randomeffect(gen), PLANT, i, false, gen->generateName());
 		Alchemy::ingredients[obj] = 10;
 	}
 	
@@ -19,11 +34,7 @@ int main() {
 
 		std::map<AlchemyObject*, unsigned int>::iterator it2;
 		for (it2 = Alchemy::ingredients.begin(); it2 != Alchemy::ingredients.end(); it2++) {
-			int rand = gen->random(1, 15);
-
-			if (rand == gen->random(1,15)) {
-				Alchemy::addIngredient(it2->first);
-			}
+			Alchemy::addIngredient(it2->first);
 		}
 
 		Alchemy::mix(gen);

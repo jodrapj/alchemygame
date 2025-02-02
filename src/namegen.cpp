@@ -60,6 +60,7 @@ std::map<unsigned int, std::string> NameGen::potionName = {
 std::map<std::pair<std::string, Effects>, float> NameGen::potionPotencyEffectName = {
 
 	// ALCOHOL effect
+	{{"Weak beer", ALCOHOL}, 0},
 	{{"Beer", ALCOHOL}, 1},
 	{{"Liquor", ALCOHOL}, 2},
 	{{"Vodka", ALCOHOL}, 3},
@@ -67,6 +68,7 @@ std::map<std::pair<std::string, Effects>, float> NameGen::potionPotencyEffectNam
 	{{"Liver Killer", ALCOHOL}, 5},
 
 	// HEAL effect
+	{{"Diluted", HEAL}, 1},
 	{{"Invigorating", HEAL}, 1},
 	{{"Relieving", HEAL}, 2},
 	{{"Healing", HEAL}, 3},
@@ -74,6 +76,7 @@ std::map<std::pair<std::string, Effects>, float> NameGen::potionPotencyEffectNam
 	{{"All-Curing", HEAL}, 5},
 
 	// DAMAGE effect
+	{{"Tickling", DAMAGE}, 0},
 	{{"Hurting", DAMAGE}, 1},
 	{{"Sickening", DAMAGE}, 2},
 	{{"Damaging", DAMAGE}, 3},
@@ -88,19 +91,18 @@ std::map<unsigned int, std::string> NameGen::potionType = {
 	{0, "Flask"},
 	{1, "Vial"},
 	{2, "Bottle"},
-	{3, "Basket"}
+	{3, "Jar"}
 };
 // Returns effect name based on intensity value using potionPotencyEffectName map
 std::string NameGen::getEffectName(Effects effect, float intensity) {
 	std::string name;
+	intensity = floor(intensity);
 
 	std::map<std::pair<std::string, Effects>, float>::iterator it;
 
 	for (it = potionPotencyEffectName.begin(); it != potionPotencyEffectName.end(); it++) {
 		if (it->second == floor(intensity) && it->first.second == effect) {
 			name = it->first.first;
-		} else {
-			name = "Unknown";
 		}
 	}
 
