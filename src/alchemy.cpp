@@ -23,6 +23,15 @@ void Alchemy::addIngredient(AlchemyObject* ingredient) {
 // Potion generation
 void Alchemy::mix(NameGen* gen) {
 	Potion* potion = new Potion(usedIngredients, gen->generateNameE(usedIngredients));
+	
+	std::map<Potion*, unsigned int>::iterator it;
+	for (it = potions.begin(); it != potions.end(); it++) {
+		if (*potion==*it->first) {
+			potions[it->first] += 1;
+			return;
+		}
+	}
+
 	potions[potion] += 1;
 }
 

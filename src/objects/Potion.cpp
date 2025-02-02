@@ -9,3 +9,7 @@ Potion::Potion(std::map<AlchemyObject*, unsigned int> usedIngredients, std::stri
 		intensity += it->first->intensity / 10;
 	}
 }
+
+bool operator==(Potion const& p1, Potion const& p2) {
+	return p1.name == p2.name && p1.intensity == p2.intensity;
+}

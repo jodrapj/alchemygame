@@ -12,4 +12,6 @@ public:
 	std::map<Effects, unsigned int> effect;
 	float intensity;
 	Potion(std::map<AlchemyObject*, unsigned int> usedIngredients, std::string name);
+
+	friend bool operator==(Potion const& p1, Potion const& p2);
 };
