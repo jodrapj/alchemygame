@@ -3,9 +3,7 @@
 enum Effects {
 	ALCOHOL,
 	HEAL,
-	DAMAGE,
-	UNSTUN,
-	STUN
+	DAMAGE
 };
 
 enum IngrType {

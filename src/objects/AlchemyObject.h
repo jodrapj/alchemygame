@@ -1,9 +1,7 @@
 #pragma once
 
 #include <string>
-
-enum Effects;
-enum IngrType;
+#include "enums.h"
 
 // Alchemic intensity table
 // 0: Very weak: Effect is so weak it can't be felt

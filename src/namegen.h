@@ -4,6 +4,8 @@
 #include <string>
 #include <random>
 
+#include "enums.h"
+
 class AlchemyObject;
 class Potion;
 
@@ -19,13 +21,19 @@ class NameGen {
 	static std::map<unsigned int, std::string> alchemicIngredientNames;
 	static std::map<unsigned int, std::string> alchemicIngredientTypes;
 	static std::map<unsigned int, std::string> potionName;
+	static std::map<std::pair<std::string, Effects>, float> potionPotencyEffectName;
 	/// calculated by potion potency
 	static std::map<unsigned int, std::string> potionType;
+
+	std::string getEffectName(Effects effect, float intensity);
 public:
 	NameGen();
+	/// Returns random value in given range
 	int random(int min, int max);
-	/// Potion name generator
+	/// Potion name generator based on first letters of each ingredient
 	std::string generateName(std::map<AlchemyObject*, unsigned int> usedIngredients);
+	/// Potion name generator based on dominating potion effect
+	std::string generateNameE(std::map<AlchemyObject*, unsigned int> usedIngredients);
 	/// Ingredient name generator
 	std::string generateName();
 };

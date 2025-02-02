@@ -2,8 +2,8 @@
 
 #include <map>
 #include <string>
+#include "enums.h"
 
-enum Effects;
 class AlchemyObject;
 
 class Potion {

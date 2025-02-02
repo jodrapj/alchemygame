@@ -22,7 +22,7 @@ void Alchemy::addIngredient(AlchemyObject* ingredient) {
 
 // Potion generation
 void Alchemy::mix(NameGen* gen) {
-	Potion* potion = new Potion(usedIngredients, gen->generateName(usedIngredients));
+	Potion* potion = new Potion(usedIngredients, gen->generateNameE(usedIngredients));
 	potions[potion] += 1;
 }
 

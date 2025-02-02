@@ -1,6 +1,5 @@
 #include "Potion.h"
 #include "AlchemyObject.h"
-#include "enums.h"
 
 Potion::Potion(std::map<AlchemyObject*, unsigned int> usedIngredients, std::string name) : name(name), intensity(0) {
 	std::map<AlchemyObject*, unsigned int>::iterator it;
