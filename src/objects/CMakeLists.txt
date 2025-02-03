@@ -5,6 +5,3 @@ set(AlchemyObject_LIB AlchemyObject.cpp AlchemyObject.h)
 set(Potion_LIB Potion.cpp Potion.h)
 
 add_library(objects STATIC ${AlchemyObject_LIB} ${Potion_LIB})
-
-add_library(object STATIC ${AlchemyObject_LIB})
-add_library(potion STATIC ${Potion_LIB})

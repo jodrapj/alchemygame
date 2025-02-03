@@ -57,11 +57,11 @@ int main() {
 	std::cout << "Current potions:\n";
 	std::map<Potion*, unsigned int>::iterator it1;
 	for (it1 = Alchemy::potions.begin(); it1 != Alchemy::potions.end(); it1++) {
-		std::cout << "Potion: " << it1->first->name << " Quantity: " << it1->second << " Intensity: " << it1->first->intensity << " Effects: ";
+		std::cout << "Potion: " << it1->first->name << " Quantity: " << it1->second << " Intensity: " << it1->first->intensity << " ";
 		
 		std::map<Effects, unsigned int>::iterator it3;
 		for (it3 = it1->first->effect.begin(); it3 != it1->first->effect.end(); it3++) {
-			std::cout << it3->first << " Q: " << it3->second << " ";
+			std::cout << "Effect: " << it3->first << " Quantity: " << it3->second << " ";
 		}
 		std::cout << std::endl;
 	}
