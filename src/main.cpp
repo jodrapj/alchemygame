@@ -1,10 +1,14 @@
+
+#include "SDL.h"
+#include <iostream>
+
 #include "alchemy.h"
 #include "AlchemyObject.h"
 #include "enums.h"
 #include "Potion.h"
 #include "namegen.h"
-
-#include <iostream>
+#include "window.h"
+#include <SDL2/SDL_video.h>
 
 Effects randomeffect(NameGen* gen) {
 	int a = gen->random(0, 2);
@@ -23,8 +27,26 @@ Effects randomeffect(NameGen* gen) {
 
 int main() {
 
-	// TEST STAGE
+	Window::init("hello", 600, 800);
+	Window::loadMedia();
+	SDL_UpdateWindowSurface(Window::gWindow);
 
+	SDL_Event e;
+	bool quit = false;
+	while (quit == false) {
+		while (SDL_PollEvent(&e)) {
+			if (e.type == SDL_QUIT) {
+				quit == true;
+			}
+		}
+	}
+
+	return 0;
+}
+
+void testGen() {
+
+	// TEST STAGE
 	NameGen* gen = new NameGen();
 
 	// Generate 10 random ingredients
@@ -32,8 +54,8 @@ int main() {
 		AlchemyObject* obj = new AlchemyObject(randomeffect(gen), PLANT, i, false, gen->generateName());
 		Alchemy::ingredients[obj] = 10;
 	}
-	
-	// Generate 10 random potions using random ingredients
+
+	//Generate 10 random potions using random ingredients
 	for (int i = 0; i < 10; i++) {
 
 		std::map<AlchemyObject*, unsigned int>::iterator it2;
@@ -68,5 +90,4 @@ int main() {
 
 	std::cout << std::endl;
 
-	return 0;
 }
