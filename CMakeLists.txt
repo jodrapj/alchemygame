@@ -10,6 +10,7 @@ file(GLOB NameGen src/namegen.cpp src/namegen.h)
 file(GLOB Window src/window.cpp src/window.h)
 
 include_directories(
+	"${PROJECT_SOURCE_DIR}/src/"
 	"${PROJECT_SOURCE_DIR}/src/objects"
 	"${PROJECT_SOURCE_DIR}/src/types"
 	"${PROJECT_SOURCE_DIR}/lib/SDL/include"
@@ -29,4 +30,4 @@ if (WIN32)
 	target_link_libraries(main SDL2main)
 endif()
 
-target_link_libraries(main SDL2 objects alchemy namegen window types)
+target_link_libraries(main SDL2-static objects alchemy namegen window types)

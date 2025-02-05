@@ -1,14 +1,12 @@
-
-#include "SDL.h"
 #include <iostream>
 
+#include "SDL.h"
 #include "alchemy.h"
 #include "AlchemyObject.h"
 #include "enums.h"
 #include "Potion.h"
 #include "namegen.h"
 #include "window.h"
-#include <SDL2/SDL_video.h>
 
 Effects randomeffect(NameGen* gen) {
 	int a = gen->random(0, 2);
@@ -25,21 +23,50 @@ Effects randomeffect(NameGen* gen) {
 	}
 }
 
-int main() {
+int main(int argc, char* argv[]) {
 
-	Window::init("hello", 600, 800);
+	Window::init("hello", 800, 650);
 	Window::loadMedia();
-	SDL_UpdateWindowSurface(Window::gWindow);
-
-	SDL_Event e;
+	
 	bool quit = false;
-	while (quit == false) {
-		while (SDL_PollEvent(&e)) {
+	SDL_Event e;
+	Window::gCurrentSurface = Window::gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT];
+
+	while (!quit) {
+		while (SDL_PollEvent(&e) != 0) {
 			if (e.type == SDL_QUIT) {
-				quit == true;
+				quit = true;
+			} else if (e.type == SDL_KEYDOWN) {
+				switch (e.key.keysym.sym) {
+				case SDLK_UP:
+					Window::gCurrentSurface = Window::gKeyPressSurfaces[KEY_PRESS_SURFACE_UP];
+					break;
+
+				case SDLK_DOWN:
+					Window::gCurrentSurface = Window::gKeyPressSurfaces[KEY_PRESS_SURFACE_DOWN];
+					break;
+
+				case SDLK_LEFT:
+					Window::gCurrentSurface = Window::gKeyPressSurfaces[KEY_PRESS_SURFACE_LEFT];
+					break;
+
+				case SDLK_RIGHT:
+					Window::gCurrentSurface = Window::gKeyPressSurfaces[KEY_PRESS_SURFACE_RIGHT];
+					break;
+
+				default:
+					Window::gCurrentSurface = Window::gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT];
+					break;
+				}
 			}
 		}
+
+		SDL_BlitSurface(Window::gCurrentSurface, NULL, Window::gScreenSurface, NULL);
+
+		SDL_UpdateWindowSurface(Window::gWindow);
 	}
+
+	Window::destroy();
 
 	return 0;
 }
