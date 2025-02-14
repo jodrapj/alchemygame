@@ -2,11 +2,14 @@
 
 #include "SDL.h"
 #include "alchemy.h"
-#include "AlchemyObject.h"
+#include "Alchemy/AlchemyObject.h"
 #include "enums.h"
-#include "Potion.h"
+#include "Alchemy/Potion.h"
 #include "namegen.h"
-#include "window.h"
+#include "window/window.h"
+#include "entity.h"
+#include "window/events.h"
+#include <numeric>
 
 Effects randomeffect(NameGen* gen) {
 	int a = gen->random(0, 2);
@@ -25,48 +28,45 @@ Effects randomeffect(NameGen* gen) {
 
 int main(int argc, char* argv[]) {
 
-	Window::init("hello", 800, 650);
-	Window::loadMedia();
-	
-	bool quit = false;
-	SDL_Event e;
-	Window::gCurrentSurface = Window::gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT];
+	Window::init("alchemygame", 1280, 720);
 
-	while (!quit) {
-		while (SDL_PollEvent(&e) != 0) {
-			if (e.type == SDL_QUIT) {
-				quit = true;
-			} else if (e.type == SDL_KEYDOWN) {
-				switch (e.key.keysym.sym) {
-				case SDLK_UP:
-					Window::gCurrentSurface = Window::gKeyPressSurfaces[KEY_PRESS_SURFACE_UP];
-					break;
+	Entity player;
+	player.x = 1;
+	player.y = 1;
+	player.texture = Window::loadTexture("res/textures/player.png");
 
-				case SDLK_DOWN:
-					Window::gCurrentSurface = Window::gKeyPressSurfaces[KEY_PRESS_SURFACE_DOWN];
-					break;
+	float normalY = (Window::height / (Window::height / 2)) - 1;
+	float normalX = (Window::width / (Window::width / 2)) - 1;
 
-				case SDLK_LEFT:
-					Window::gCurrentSurface = Window::gKeyPressSurfaces[KEY_PRESS_SURFACE_LEFT];
-					break;
-
-				case SDLK_RIGHT:
-					Window::gCurrentSurface = Window::gKeyPressSurfaces[KEY_PRESS_SURFACE_RIGHT];
-					break;
-
-				default:
-					Window::gCurrentSurface = Window::gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT];
-					break;
-				}
-			}
-		}
-
-		SDL_BlitSurface(Window::gCurrentSurface, NULL, Window::gScreenSurface, NULL);
-
-		SDL_UpdateWindowSurface(Window::gWindow);
+	int moveReq[4];
+	for (int i = 0; i < 3; i++) {
+		moveReq[i] = 0;
 	}
 
-	Window::destroy();
+	while (1) {
+		SDL_SetRenderDrawColor(Window::renderer, 96, 128, 255, 255);
+		SDL_RenderClear(Window::renderer);
+		Events::handler(moveReq);
+
+		if (moveReq[0]) {
+			player.y -= 4;
+		}
+		if (moveReq[1]) {
+			player.y += 4;
+		}
+		if (moveReq[2]) {
+			player.x -= 4;
+		}
+		if (moveReq[3]) {
+			player.x += 4;
+		}
+
+		std::cout << "Plr X: " << player.x << " Plr y" << player.y << " X normal: " << normalX << " Y normal " << normalY << std::endl;
+		
+		Window::blit(player.texture, player.x * 2, player.y * 2);
+		SDL_RenderPresent(Window::renderer);
+		SDL_Delay(16);
+	}
 
 	return 0;
 }

@@ -2,8 +2,8 @@
 
 #include <random>
 
-#include "AlchemyObject.h"
-#include "Potion.h"
+#include "Alchemy/AlchemyObject.h"
+#include "Alchemy/Potion.h"
 #include "mathf.h"
 
 std::map<unsigned int, std::string> NameGen::alchemicIngredientNames = {

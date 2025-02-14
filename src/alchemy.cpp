@@ -1,7 +1,7 @@
 #include "alchemy.h"
 
-#include "AlchemyObject.h"
-#include "Potion.h"
+#include "Alchemy/AlchemyObject.h"
+#include "Alchemy/Potion.h"
 #include "namegen.h"
 #include "enums.h"
 
