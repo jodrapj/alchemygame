@@ -25,7 +25,6 @@ include_directories(
 
 add_library(alchemy STATIC ${Alchemy})
 add_library(namegen STATIC ${NameGen})
-add_library(app STATIC ${App})
 
 add_executable(main ${SOURCE_EXE})
 
@@ -34,7 +33,6 @@ add_subdirectory(src/objects)
 add_subdirectory(src/types)
 add_subdirectory(lib/SDL)
 add_subdirectory(lib/SDL_image)
-add_subdirectory(src/graphics)
 
 if (WIN32)
     add_custom_command(
@@ -52,7 +50,7 @@ endif()
 target_link_libraries(main 
     SDL2 SDL2_image 
     objects alchemy namegen
-    graphics window
+    window
     types)
 
 if (WIN32)

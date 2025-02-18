@@ -1,14 +1,14 @@
 #pragma once
 
-class SDL_Texture;
+#include <SDL.h>
+#include <SDL_image.h>
 
 class Entity {
-public:
-	int x;
-	int y;
-	SDL_Texture* texture;
+private:
+	float x, y;
+	SDL_Rect currentFrame;
+	SDL_Texture* tex;
 
-	Entity(int x, int y, SDL_Texture* texture);
-	Entity(int x, int y);
-	Entity();
+public:
+	Entity(float p_x, float p_y, SDL_Texture* p_tex);
 };

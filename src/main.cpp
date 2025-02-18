@@ -1,14 +1,14 @@
 #include <iostream>
 
 #include "SDL.h"
+#include "SDL_image.h"
+
 #include "alchemy.h"
 #include "Alchemy/AlchemyObject.h"
 #include "enums.h"
 #include "Alchemy/Potion.h"
 #include "namegen.h"
 #include "window/window.h"
-#include "entity.h"
-#include "window/events.h"
 #include <numeric>
 
 Effects randomeffect(NameGen* gen) {
@@ -28,45 +28,37 @@ Effects randomeffect(NameGen* gen) {
 
 int main(int argc, char* argv[]) {
 
-	Window::init("alchemygame", 1280, 720);
+	if (SDL_Init(SDL_INIT_VIDEO) > 1) {
+		std::cout << "SDL fucked up, SDL_ERROR: " << SDL_GetError() << std::endl;
 
-	Entity player;
-	player.x = 1;
-	player.y = 1;
-	player.texture = Window::loadTexture("res/textures/player.png");
-
-	float normalY = (Window::height / (Window::height / 2)) - 1;
-	float normalX = (Window::width / (Window::width / 2)) - 1;
-
-	int moveReq[4];
-	for (int i = 0; i < 3; i++) {
-		moveReq[i] = 0;
 	}
 
-	while (1) {
-		SDL_SetRenderDrawColor(Window::renderer, 96, 128, 255, 255);
-		SDL_RenderClear(Window::renderer);
-		Events::handler(moveReq);
-
-		if (moveReq[0]) {
-			player.y -= 4;
-		}
-		if (moveReq[1]) {
-			player.y += 4;
-		}
-		if (moveReq[2]) {
-			player.x -= 4;
-		}
-		if (moveReq[3]) {
-			player.x += 4;
-		}
-
-		std::cout << "Plr X: " << player.x << " Plr y" << player.y << " X normal: " << normalX << " Y normal " << normalY << std::endl;
-		
-		Window::blit(player.texture, player.x * 2, player.y * 2);
-		SDL_RenderPresent(Window::renderer);
-		SDL_Delay(16);
+	if (!(IMG_Init(IMG_INIT_PNG))) {
+		std::cout << "IMG_Init fucked up, Error: " << SDL_GetError() << std::endl;
 	}
+
+	Window window("pussymaker", 1280, 720);
+
+	SDL_Texture* playerTexture = window.loadTexture("res/textures/player.png");
+
+	bool gameRunning = true;
+	
+	SDL_Event event;
+
+	while (gameRunning) {
+		while (SDL_PollEvent(&event)) {
+			if (event.type == SDL_QUIT) {
+				gameRunning = false;
+			}
+		}
+
+		window.clear();
+		window.render(playerTexture);
+		window.display();
+	}
+
+	window.cleanUp();
+	SDL_Quit();
 
 	return 0;
 }

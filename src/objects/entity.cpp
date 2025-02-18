@@ -1,10 +1,5 @@
 #include "entity.h"
 
-Entity::Entity(int x, int y, SDL_Texture* texture) : x(x), y(y), texture(texture) {
-}
+Entity::Entity(float p_x, float p_y, SDL_Texture* p_tex) {
 
-Entity::Entity(int x, int y) : x(x), y(y) {
-}
-
-Entity::Entity() {
 }

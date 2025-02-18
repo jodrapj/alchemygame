@@ -1,93 +1,61 @@
 #include "window.h"
 #include "window.h"
 #include "window.h"
-
-#include <iostream>
+#include "window.h"
+#include "window.h"
 #include <SDL.h>
 #include <SDL_image.h>
 
-SDL_Window* Window::window = NULL;
-SDL_Surface* Window::screenSurface = NULL;
-SDL_Texture* Window::texture = NULL;
-SDL_Renderer* Window::renderer = NULL;
+#include "window.h"
 
-int Window::width = 0;
-int Window::height = 0;
+#include <iostream>
 
-int Window::init(const char* title, int width, int height) {
-	int rendererFlags, windowFlags;
+Window::Window(const char* p_title, int p_w, int p_h) : window(NULL), renderer(NULL) {
+	window = SDL_CreateWindow(p_title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, p_w, p_h, SDL_WINDOW_SHOWN);
 	
-	Window::width = width;
-	Window::height = height;
-
-	rendererFlags = SDL_RENDERER_ACCELERATED;
-	windowFlags = 0;
-
-	// SDL Initialization
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-		std::cout << "SDL could not initialize! SDL_ERROR: " << SDL_GetError() << std::endl;
-		return 1;
-	}
-
-	// Window creation
-	window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, windowFlags);
 	if (window == NULL) {
-		std::cout << "Window could not be created! SDL_ERROR: " << SDL_GetError() << std::endl;
-		return 1;
+		std::cout << "Window failed to init. Error: " << SDL_GetError() << std::endl;
 	}
 
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-
-	// Create renderer
-	renderer = SDL_CreateRenderer(window, -1, rendererFlags);
-	if (renderer == NULL) {
-		std::cout << "Renderer coult not be created! SDL_ERROR: " << SDL_GetError() << std::endl;
-		return 1;
-	}
-
-	// Set renderer(background) color to white
-	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-
-	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
-	if (!(IMG_Init(imgFlags) & imgFlags)) {
-		std::cout << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << std::endl;
-		return 1;
-	}
-
-	return 0;
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 }
 
-void Window::destroy() {
+SDL_Texture* Window::loadTexture(const char* p_filePath) {
+	SDL_Texture* texture = NULL;
+	texture = IMG_LoadTexture(renderer, p_filePath);
 
-	SDL_DestroyTexture(texture);
-	texture = NULL;
-
-	SDL_DestroyRenderer(renderer);
-	renderer = NULL;
-
-	SDL_DestroyWindow(window);
-	window = NULL;
-
-	IMG_Quit();
-	SDL_Quit();
-}
-
-SDL_Texture* Window::loadTexture(std::string path) {
-	SDL_Texture* texture;
-
-	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s", path.c_str());
-
-	texture = IMG_LoadTexture(renderer, path.c_str());
+	if (texture == NULL) {
+		std::cout << "Failed to load texture, Error: " << SDL_GetError() << std::endl;
+	}
 
 	return texture;
 }
 
-void Window::blit(SDL_Texture* texture, int x, int y) {
-	SDL_Rect dest;
+void Window::cleanUp() {
+	SDL_DestroyWindow(window);
+}
 
-	dest.x = x;
-	dest.y = y;
-	SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
+void Window::clear() {
+	SDL_RenderClear(renderer);
+}
 
-	SDL_RenderCopy(renderer, texture, NULL, &dest);
+void Window::render(SDL_Texture* p_tex) {
+	SDL_Rect src;
+	src.x = 0;
+	src.y = 0;
+	src.w = 32;
+	src.h = 32;
+
+	// destination
+	SDL_Rect dst;
+	dst.x = 0;
+	dst.y = 0;
+	dst.w = 32 * 4;
+	dst.h = 32 * 4;
+
+	SDL_RenderCopy(renderer, p_tex, &src, &dst);
+}
+
+void Window::display() {
+	SDL_RenderPresent(renderer);
 }
