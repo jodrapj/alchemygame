@@ -2,13 +2,18 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
+#include <vector>
+
+#include "window/window.h"
+#include "window/events.h"
+
+#include "entity.h"
 
 #include "alchemy.h"
 #include "Alchemy/AlchemyObject.h"
 #include "enums.h"
 #include "Alchemy/Potion.h"
 #include "namegen.h"
-#include "window/window.h"
 #include <numeric>
 
 Effects randomeffect(NameGen* gen) {
@@ -28,32 +33,45 @@ Effects randomeffect(NameGen* gen) {
 
 int main(int argc, char* argv[]) {
 
+	Uint64 currentTime = SDL_GetPerformanceCounter();
+	Uint64 lastTime = 0;
+	float deltaTime = 0;
+
 	if (SDL_Init(SDL_INIT_VIDEO) > 1) {
 		std::cout << "SDL fucked up, SDL_ERROR: " << SDL_GetError() << std::endl;
-
+		return 1;
 	}
 
 	if (!(IMG_Init(IMG_INIT_PNG))) {
 		std::cout << "IMG_Init fucked up, Error: " << SDL_GetError() << std::endl;
+		return 1;
 	}
 
 	Window window("pussymaker", 1280, 720);
+	EventHandler handler;
 
 	SDL_Texture* playerTexture = window.loadTexture("res/textures/player.png");
 
+	std::vector<Entity> plrs = {
+		Entity(Vector2f(0,0), playerTexture)
+	};
+
 	bool gameRunning = true;
-	
-	SDL_Event event;
 
 	while (gameRunning) {
-		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_QUIT) {
-				gameRunning = false;
-			}
+		lastTime = currentTime;
+		currentTime = SDL_GetPerformanceCounter();
+
+		deltaTime = ((currentTime - lastTime) * 1000 / (float)SDL_GetPerformanceFrequency());
+
+		if (handler.handle(plrs[0]) == 1) {
+			gameRunning = false;
 		}
 
+		plrs[0].update();
+
 		window.clear();
-		window.render(playerTexture);
+		window.render(plrs[0], 0, plrs[0].getCenter(), plrs[0].getFlip());
 		window.display();
 	}
 
